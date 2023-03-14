@@ -8,7 +8,8 @@ public class player : MonoBehaviour
 
     void Start()
     {
-
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
