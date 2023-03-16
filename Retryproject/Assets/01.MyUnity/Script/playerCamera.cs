@@ -4,48 +4,30 @@ using UnityEngine;
 
 public class playerCamera : MonoBehaviour
 {
-    [SerializeField] private float rotCamXAxisSpeed = 5f; // 카메라 x축 회전속도
-    [SerializeField] private float rotCamYAxisSpeed = 3f; // 카메라 y축 회전속도
+    public float turnSpeed = 4.0f; // 마우스 회전 속도    
+    private float xRotate = 0.0f; // 내부 사용할 X축 회전량은 별도 정의 ( 카메라 위 아래 방향 )
 
-    private float limitMinX = -80; // 카메라 x축 회전 범위 (최소)
-    private float limitMaxX = 50; // 카메라 x축 회전 범위 (최대)
-
-    private float eulerAngleX; // 마우스 좌 / 우 이동으로 카메라 y축 회전
-    private float eulerAngleY; // 마우 위 / 아래 이동으로 카메라 x축 회전
-
-    public void CalculateRotation(float mouseX, float mouseY)
+    // Start is called before the first frame update
+    void Start()
     {
-        eulerAngleY += mouseX * rotCamYAxisSpeed;
-        eulerAngleX -= mouseY * rotCamYAxisSpeed;
-        eulerAngleX = ClampAngle(eulerAngleX, limitMinX, limitMaxX);
-        transform.rotation = Quaternion.Euler(eulerAngleX, eulerAngleY, 0);
+
     }
 
-    // 카메라 x축 회전의 경우 회전 범위를 설정
-    private float ClampAngle(float angle, float min, float max)
-    {
-        if (angle < -360)
-        {
-            angle += 360;
-        }
-
-        if (angle > 360)
-        {
-            angle -= 360;
-        }
-
-        return Mathf.Clamp(angle, min, max);
-    }
-
+    // Update is called once per frame
     void Update()
     {
-        UpdateRotate();
-    }
+        // 좌우로 움직인 마우스의 이동량 * 속도에 따라 카메라가 좌우로 회전할 양 계산
+        float yRotateSize = Input.GetAxis("Mouse X") * turnSpeed;
+        // 현재 y축 회전값에 더한 새로운 회전각도 계산
+        float yRotate = transform.eulerAngles.y + yRotateSize;
 
-    void UpdateRotate()
-    {
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
-        CalculateRotation(mouseX, mouseY);
+        // 위아래로 움직인 마우스의 이동량 * 속도에 따라 카메라가 회전할 양 계산(하늘, 바닥을 바라보는 동작)
+        float xRotateSize = -Input.GetAxis("Mouse Y") * turnSpeed;
+        // 위아래 회전량을 더해주지만 -45도 ~ 80도로 제한 (-45:하늘방향, 80:바닥방향)
+        // Clamp 는 값의 범위를 제한하는 함수
+        xRotate = Mathf.Clamp(xRotate + xRotateSize, -45, 80);
+
+        // 카메라 회전량을 카메라에 반영(X, Y축만 회전)
+        transform.eulerAngles = new Vector3(xRotate, yRotate, 0);
     }
 }
