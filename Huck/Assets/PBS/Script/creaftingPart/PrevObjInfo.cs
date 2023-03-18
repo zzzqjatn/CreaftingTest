@@ -7,10 +7,6 @@ public class PrevObjInfo : MonoBehaviour
     public bool isBuildAble = false;
     private List<GameObject> cols = new List<GameObject>();
 
-    void Start()
-    {
-
-    }
 
     void Update()
     {
@@ -42,6 +38,17 @@ public class PrevObjInfo : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("build"))
         {
             cols.Remove(other.gameObject);
+        }
+    }
+
+    public void deleteObjTime()
+    {
+        if (cols.Count > 0)
+        {
+            for (int i = 0; i < cols.Count; i++)
+            {
+                cols.RemoveAt(0);
+            }
         }
     }
 }
