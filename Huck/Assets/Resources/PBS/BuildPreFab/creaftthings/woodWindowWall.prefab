@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 1758422613067499260}
   - component: {fileID: 1751568120950106996}
   m_Layer: 0
-  m_Name: SM_Bld_House_Wall_Window_06_Glass
+  m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
